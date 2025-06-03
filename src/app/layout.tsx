@@ -28,8 +28,8 @@ export default function RootLayout({
       >
         <header className="flex items-center justify-end px-10 py-6 min-w-full gap-4 border-b mb-10">
           <Link href="/">Home</Link>
-          <Link href="products">Products</Link>
-          <Link href="about">About</Link>
+          <Link href="/products">Products</Link>
+          <Link href="/about">About</Link>
         </header>
         <div className="px-10">{children}</div>
       </body>
