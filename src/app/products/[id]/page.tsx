@@ -1,14 +1,15 @@
 "use client";
-import { Product, useCart } from "@/context/CartContext";
+import { CartItem, Product, useCart } from "@/context/CartContext";
 import { products } from "@/data/products";
+import { Minus, Plus } from "lucide-react";
 import { notFound, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function ProductPage() {
   const [product, setProduct] = useState<Product>();
   const { id } = useParams();
-  const { cart, addCart } = useCart();
-  const isAddedToCart = product && cart.includes(product);
+  const { cartItems, dispatch } = useCart();
+  const addedToCart = cartItems.find((p: CartItem) => p.product === product);
 
   useEffect(() => {
     const product = products.find((p) => p.id === id);
@@ -32,13 +33,47 @@ function ProductPage() {
           className="border rounded-xl"
         />
       </div>
-      <button
-        disabled={isAddedToCart}
-        onClick={() => addCart(product)}
-        className="mt-4 px-4 py-2 bg-blue-600 cursor-pointer disabled:cursor-none dark:bg-gray-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-gray-800 transition"
-      >
-        {isAddedToCart ? "added to cart" : "Add to cart"}
-      </button>
+      <div className="flex justify-between items-center gap-8 mt-4">
+        <button
+          disabled={!!addedToCart}
+          onClick={() => dispatch({ type: "ADD", payload: product })}
+          className=" w-full px-4 py-2 bg-blue-600 cursor-pointer disabled:cursor-none dark:bg-gray-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-gray-800 transition"
+        >
+          {!!addedToCart ? "added to cart" : "Add to cart"}
+        </button>
+        {cartItems.length !== 0 && !!addedToCart ? (
+          <div className="flex gap-3 items-center justify-between">
+            <button
+              className="px-4 py-2 bg-gray-400 rounded-lg"
+              onClick={() =>
+                addedToCart.quantity === 1
+                  ? dispatch({
+                      type: "REMOVE",
+                      payload: product,
+                    })
+                  : dispatch({
+                      type: "REDUCE",
+                      payload: product,
+                    })
+              }
+            >
+              <Minus size={16} />
+            </button>
+            <p className="text-nowrap">
+              {
+                cartItems.find((p: CartItem) => p.product.id === product.id)
+                  ?.quantity
+              }
+            </p>
+            <button
+              className="px-4 py-2 bg-gray-400 rounded-lg cursor-pointer"
+              onClick={() => dispatch({ type: "ADD", payload: product })}
+            >
+              <Plus size={16} />
+            </button>
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }
