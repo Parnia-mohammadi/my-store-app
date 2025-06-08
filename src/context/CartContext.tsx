@@ -5,6 +5,7 @@ import {
   Dispatch,
   ReactNode,
   useContext,
+  useEffect,
   useReducer,
 } from "react";
 
@@ -45,11 +46,13 @@ const cartReducer = (state: CartItem[], { type, payload }: CartAction) => {
         : [...state, { product: payload, quantity: 1 }];
     }
     case "REDUCE": {
-      return state.map((cartItem) =>
-        cartItem.product.id === payload.id
-          ? { ...cartItem, quantity: cartItem.quantity - 1 }
-          : cartItem
-      );
+      return state
+        .map((cartItem) =>
+          cartItem.product.id === payload.id
+            ? { ...cartItem, quantity: cartItem.quantity - 1 }
+            : cartItem
+        )
+        .filter((item) => item.quantity > 0);
     }
     case "REMOVE": {
       return state.filter((cartItem) => cartItem.product.id !== payload.id);
@@ -60,7 +63,18 @@ const cartReducer = (state: CartItem[], { type, payload }: CartAction) => {
 };
 
 export default function CartProvider({ children }: { children: ReactNode }) {
-  const [cartItems, dispatch] = useReducer(cartReducer, []);
+  const init = () => {
+    if (typeof window !== "undefined") {
+      const rawData = localStorage.getItem("storedCart");
+      return rawData ? JSON.parse(rawData) : [];
+    }
+    return [];
+  };
+  const [cartItems, dispatch] = useReducer(cartReducer, [], init);
+
+  useEffect(() => {
+    localStorage.setItem("storedCart", JSON.stringify(cartItems));
+  }, [cartItems]);
 
   return (
     <CartContext.Provider value={{ cartItems, dispatch }}>

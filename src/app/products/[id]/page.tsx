@@ -44,17 +44,12 @@ function ProductPage() {
         {cartItems.length !== 0 && !!addedToCart ? (
           <div className="flex gap-3 items-center justify-between">
             <button
-              className="px-4 py-2 bg-gray-400 rounded-lg"
+              className="px-4 py-2 bg-gray-400 rounded-lg hover:bg-gray-500"
               onClick={() =>
-                addedToCart.quantity === 1
-                  ? dispatch({
-                      type: "REMOVE",
-                      payload: product,
-                    })
-                  : dispatch({
-                      type: "REDUCE",
-                      payload: product,
-                    })
+                dispatch({
+                  type: "REDUCE",
+                  payload: product,
+                })
               }
             >
               <Minus size={16} />
@@ -66,7 +61,7 @@ function ProductPage() {
               }
             </p>
             <button
-              className="px-4 py-2 bg-gray-400 rounded-lg cursor-pointer"
+              className="px-4 py-2 bg-gray-400 rounded-lg hover:bg-gray-500 cursor-pointer"
               onClick={() => dispatch({ type: "ADD", payload: product })}
             >
               <Plus size={16} />
