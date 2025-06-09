@@ -1,15 +1,18 @@
 "use client";
 import { CartItem, Product, useCart } from "@/context/CartContext";
 import { products } from "@/data/products";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import { notFound, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 function ProductPage() {
   const [product, setProduct] = useState<Product>();
   const { id } = useParams();
   const { cartItems, dispatch } = useCart();
-  const addedToCart = cartItems.find((p: CartItem) => p.product === product);
+  const addedToCart = cartItems.find(
+    (p: CartItem) => p.product.id === product?.id
+  );
 
   useEffect(() => {
     const product = products.find((p) => p.id === id);
@@ -36,7 +39,10 @@ function ProductPage() {
       <div className="flex justify-between items-center gap-8 mt-4">
         <button
           disabled={!!addedToCart}
-          onClick={() => dispatch({ type: "ADD", payload: product })}
+          onClick={() => {
+            dispatch({ type: "ADD", payload: product });
+            addedToCart ? null : toast.success("added to the cart");
+          }}
           className=" w-full px-4 py-2 bg-blue-600 cursor-pointer disabled:cursor-none dark:bg-gray-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-gray-800 transition"
         >
           {!!addedToCart ? "added to cart" : "Add to cart"}
@@ -52,7 +58,11 @@ function ProductPage() {
                 })
               }
             >
-              <Minus size={16} />
+              {addedToCart.quantity === 1 ? (
+                <Trash2 size={16} className="text-red-500" />
+              ) : (
+                <Minus size={16} />
+              )}
             </button>
             <p className="text-nowrap">
               {
