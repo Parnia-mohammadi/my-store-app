@@ -5,7 +5,15 @@ import { useRouter } from "next/navigation";
 
 function cart() {
   const { cartItems, dispatch } = useCart();
+  const totalPrice = cartItems.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
   const router = useRouter();
+
+  const handleCheckout = async () => {
+    router.push("/checkout");
+  };
 
   return (
     <div className="max-w-2xl mx-auto mt-8">
@@ -68,14 +76,14 @@ function cart() {
           </table>
           <div className="flex items-center justify-between w-full gap-6 mt-6 font-bold text-xl">
             <p>Total Price :</p>
-            <p>
-              {cartItems.reduce(
-                (sum, item) => sum + item.product.price * item.quantity,
-                0
-              )}
-            </p>
+            <p>{totalPrice}</p>
           </div>
-          <button onClick={()=>router.push("/checkout")} className="bg-gray-700 w-full p-4 mt-6 rounded-md hover:bg-gray-800">Continue Payment</button>
+          <button
+            onClick={() => handleCheckout()}
+            className="bg-gray-700 w-full p-4 mt-6 rounded-md hover:bg-gray-800"
+          >
+            Continue Payment
+          </button>
         </div>
       )}
     </div>

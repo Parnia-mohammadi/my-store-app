@@ -2,6 +2,7 @@
 import { CartItem, Product, useCart } from "@/context/CartContext";
 import { products } from "@/data/products";
 import { Minus, Plus, Trash2 } from "lucide-react";
+import Image from "next/image";
 import { notFound, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -28,11 +29,11 @@ function ProductPage() {
           <h1 className="text-xl font-bold text-nowrap">{product.name}</h1>
           <p className="text-lg mt-2">Price: {product.price} dollars</p>
         </div>
-        <img
+        <Image
           src={product.url}
           alt={product.name}
-          width="600px"
-          height="400px"
+          width={600}
+          height={400}
           className="border rounded-xl"
         />
       </div>
