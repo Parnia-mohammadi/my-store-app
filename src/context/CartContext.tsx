@@ -8,7 +8,6 @@ import {
   useEffect,
   useReducer,
 } from "react";
-import toast from "react-hot-toast";
 
 export type Product = {
   id: string;

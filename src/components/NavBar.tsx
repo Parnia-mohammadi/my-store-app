@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 function NavBar() {
   const { cartItems } = useCart();
   const [isMounted, setIsMounted] = useState(false);
-  const { user, Login, Logout } = useUser();
+  const { user, Logout } = useUser();
 
   useEffect(() => {
     setIsMounted(true);

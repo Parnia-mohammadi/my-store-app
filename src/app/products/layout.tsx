@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import CategoriesPage from "./categories/page";
 
 type ProductsLayoutProps = {
   children: ReactNode;
