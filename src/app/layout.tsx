@@ -4,6 +4,7 @@ import "./globals.css";
 import CartProvider from "@/context/CartContext";
 import NavBar from "@/components/NavBar";
 import { Toaster } from "react-hot-toast";
+import UserProvider from "@/context/UserContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,8 +33,10 @@ export default function RootLayout({
       >
         <Toaster />
         <CartProvider>
-          <NavBar />
-          <div className="px-10">{children}</div>
+          <UserProvider>
+            <NavBar />
+            <div className="px-10">{children}</div>
+          </UserProvider>
         </CartProvider>
       </body>
     </html>
